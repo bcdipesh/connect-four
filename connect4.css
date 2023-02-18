@@ -1,3 +1,37 @@
+* {
+	box-sizing: border-box;
+	font-family: nunito, sans-serif !important;
+	background-color: #f9f5ea;
+}
+
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	overflow-y: hidden;
+}
+
+h1 {
+	text-align: center;
+}
+
+#player1-color:focus,
+#player2-color:focus,
+#start-game-btn:focus {
+	outline: none;
+}
+
+.player1,
+.player2 {
+	font-size: 2rem;
+	display: inline-block;
+}
+
+#board {
+	margin-top: 5rem;
+}
+
 /* game board table */
 
 #board td {
@@ -19,8 +53,4 @@
 
 #column-top td {
 	border: dashed 1px lightgray;
-}
-
-#column-top td:hover {
-	background-color: gold;
 }

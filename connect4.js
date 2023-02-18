@@ -183,6 +183,19 @@ class Game {
 
 			board.append(row);
 		}
+
+		// set background color to the current player color on mouse hover
+		document.querySelectorAll('#column-top td').forEach((td) => {
+			td.addEventListener(
+				'mouseenter',
+				() => (td.style.backgroundColor = this.currPlayer.color)
+			);
+
+			td.addEventListener(
+				'mouseleave',
+				() => (td.style.backgroundColor = '#f9f5ea')
+			);
+		});
 	};
 }
 
@@ -219,7 +232,10 @@ const startNewGame = () => {
 
 		const [player1, player2] = getPlayers(player1Color, player2Color);
 
-		new Game(6, 7, player1, player2);
+		document.querySelector('.player1').style.color = player1Color;
+		document.querySelector('.player2').style.color = player2Color;
+
+		new Game(6, 8, player1, player2);
 	} else {
 		alert('Please provide valid color name for both players');
 	}

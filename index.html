@@ -2,17 +2,31 @@
 
 <head>
   <title>Connect 4</title>
+  <meta name="description" content="Connect 4 Game built with vanilla HTML, CSS and JS">
+  <meta name="author" content="Dipesh B C, Springboard">
+
+  <!-- nunito font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito&family=Square+Peg&display=swap" rel="stylesheet">
+
   <link href="connect4.css" rel="stylesheet">
 </head>
 
 <body>
-
   <div id="game">
+    <h1>Connect 4 Game</h1>
     <form class="start-game-form">
       <input type="text" name="player1-color" id="player1-color" placeholder="Color for Player 1">
       <input type="text" name="player2-color" id="player2-color" placeholder="Color for Player 2">
       <button type="button" id="start-game-btn">Start Game</button>
     </form>
+
+    <div class="players">
+      <p>Player: <span class="player1">&#9865;</span></p>
+      <p>Player: <span class="player2">&#9865;</span></p>
+    </div>
+
     <table id="board"></table>
   </div>
 
