@@ -237,7 +237,7 @@ const startNewGame = () => {
 		document.querySelector('.player1').style.color = player1Color;
 		document.querySelector('.player2').style.color = player2Color;
 
-		new Game(6, 8, player1, player2);
+		new Game(6, 7, player1, player2);
 	} else {
 		alert('Please provide valid unique color name for both players');
 	}
