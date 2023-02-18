@@ -1,3 +1,5 @@
+'use strict';
+
 /** Connect Four
  *
  * Player 1 and 2 alternate turns. On each turn, a piece is dropped down a
@@ -5,12 +7,20 @@
  * board fills (tie)
  */
 
+class Player {
+	constructor(color) {
+		this.color = color;
+	}
+}
+
 class Game {
-	constructor(width, height) {
-		this.width = width;
+	constructor(height, width, player1, player2) {
 		this.height = height;
+		this.width = width;
 		this.board = []; // array of rows, each row is array of cells  (board[y][x])
-		this.currPlayer = 1; // active player: 1 or 2
+		this.player1 = player1;
+		this.player2 = player2;
+		this.currPlayer = this.player1;
 		this.gameOver = false;
 		this.makeBoard();
 		this.makeHtmlBoard();
@@ -32,7 +42,7 @@ class Game {
 	placeInTable = (y, x) => {
 		const piece = document.createElement('div');
 		piece.classList.add('piece');
-		piece.classList.add(`p${this.currPlayer}`);
+		piece.style.backgroundColor = this.currPlayer.color;
 		piece.style.top = -50 * (y + 2);
 
 		const spot = document.getElementById(`${y}-${x}`);
@@ -57,7 +67,7 @@ class Game {
 					y < this.height &&
 					x >= 0 &&
 					x < this.width &&
-					this.board[y][x] === this.currPlayer
+					this.board[y][x] === this.currPlayer.color
 			);
 		};
 
@@ -112,13 +122,13 @@ class Game {
 			}
 
 			// place piece in board and add to HTML table
-			this.board[y][x] = this.currPlayer;
+			this.board[y][x] = this.currPlayer.color;
 			this.placeInTable(y, x);
 
 			// check for win
 			if (this.checkForWin()) {
 				this.gameOver = true;
-				return this.endGame(`Player ${this.currPlayer} won!`);
+				return this.endGame(`Player ${this.currPlayer.color} won!`);
 			}
 
 			// check for tie
@@ -128,7 +138,8 @@ class Game {
 			}
 
 			// switch players
-			this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+			this.currPlayer =
+				this.currPlayer === this.player1 ? this.player2 : this.player1;
 		}
 	};
 
@@ -175,10 +186,43 @@ class Game {
 	};
 }
 
+// check if user provided color is valid
+const isColorValid = (color1, color2) =>
+	CSS.supports('color', color1) && CSS.supports('color', color2);
+
+// create players with their respective colors
+// provided by the user in the game-start-form
+const getPlayers = (player1Color, player2Color) => {
+	const player1 = new Player(player1Color);
+	const player2 = new Player(player2Color);
+
+	return [player1, player2];
+};
+
 // creates a new game
 const startNewGame = () => {
-	document.querySelector('#board').innerHTML = '';
-	new Game(7, 6);
+	// get player colors from user input
+	const player1Color = document
+		.querySelector('#player1-color')
+		.value.toLowerCase();
+
+	const player2Color = document
+		.querySelector('#player2-color')
+		.value.toLowerCase();
+
+	// proceed only if color names are valid css colors
+	if (isColorValid(player1Color, player2Color)) {
+		// remove old board and reset the color input field
+		document.querySelector('#board').innerHTML = '';
+		document.querySelector('#player1-color').value = '';
+		document.querySelector('#player2-color').value = '';
+
+		const [player1, player2] = getPlayers(player1Color, player2Color);
+
+		new Game(6, 7, player1, player2);
+	} else {
+		alert('Please provide valid color name for both players');
+	}
 };
 
 // start the game whenever start-game-btn is clicked
