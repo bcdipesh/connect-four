@@ -11,6 +11,7 @@ class Game {
 		this.height = height;
 		this.board = []; // array of rows, each row is array of cells  (board[y][x])
 		this.currPlayer = 1; // active player: 1 or 2
+		this.gameOver = false;
 		this.makeBoard();
 		this.makeHtmlBoard();
 	}
@@ -100,31 +101,35 @@ class Game {
 	/** handleClick: handle click of column top to play piece */
 
 	handleClick = (evt) => {
-		// get x from ID of clicked cell
-		const x = +evt.target.id;
+		if (!this.gameOver) {
+			// get x from ID of clicked cell
+			const x = +evt.target.id;
 
-		// get next spot in column (if none, ignore click)
-		const y = this.findSpotForCol(x);
-		if (y === null) {
-			return;
+			// get next spot in column (if none, ignore click)
+			const y = this.findSpotForCol(x);
+			if (y === null) {
+				return;
+			}
+
+			// place piece in board and add to HTML table
+			this.board[y][x] = this.currPlayer;
+			this.placeInTable(y, x);
+
+			// check for win
+			if (this.checkForWin()) {
+				this.gameOver = true;
+				return this.endGame(`Player ${this.currPlayer} won!`);
+			}
+
+			// check for tie
+			if (this.board.every((row) => row.every((cell) => cell))) {
+				this.gameOver = true;
+				return this.endGame('Tie!');
+			}
+
+			// switch players
+			this.currPlayer = this.currPlayer === 1 ? 2 : 1;
 		}
-
-		// place piece in board and add to HTML table
-		this.board[y][x] = this.currPlayer;
-		this.placeInTable(y, x);
-
-		// check for win
-		if (this.checkForWin()) {
-			return this.endGame(`Player ${this.currPlayer} won!`);
-		}
-
-		// check for tie
-		if (this.board.every((row) => row.every((cell) => cell))) {
-			return this.endGame('Tie!');
-		}
-
-		// switch players
-		this.currPlayer = this.currPlayer === 1 ? 2 : 1;
 	};
 
 	/** makeBoard: create in-JS board structure:
@@ -170,4 +175,13 @@ class Game {
 	};
 }
 
-new Game(6, 7);
+// creates a new game
+const startNewGame = () => {
+	document.querySelector('#board').innerHTML = '';
+	new Game(7, 6);
+};
+
+// start the game whenever start-game-btn is clicked
+document
+	.querySelector('#start-game-btn')
+	.addEventListener('click', startNewGame);
