@@ -201,7 +201,9 @@ class Game {
 
 // check if user provided color is valid
 const isColorValid = (color1, color2) =>
-	CSS.supports('color', color1) && CSS.supports('color', color2);
+	CSS.supports('color', color1) &&
+	CSS.supports('color', color2) &&
+	color1 !== color2;
 
 // create players with their respective colors
 // provided by the user in the game-start-form
@@ -237,7 +239,7 @@ const startNewGame = () => {
 
 		new Game(6, 8, player1, player2);
 	} else {
-		alert('Please provide valid color name for both players');
+		alert('Please provide valid unique color name for both players');
 	}
 };
 
